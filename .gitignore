@@ -1,0 +1,11 @@
+target/*
+target/
+*.class
+.classpath
+.project
+.settings
+logs/*
+bin/*
+.idea/*
+*\.iml
+*/logs
