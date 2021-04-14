@@ -1,56 +1,48 @@
 package navi;
 
-import jdk.nashorn.internal.runtime.regexp.JoniRegExp;
-
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.logging.Logger;
+import java.util.stream.Stream;
 
 public class StockExchange {
 
-    private ArrayList<Order> readInputFile(String filePath) {
-        File file = new File(filePath);
-        BufferedReader br = null;
+    public ArrayList<Order> readInputFile(String filePath) throws IOException {
 
-        try {
-            br = new BufferedReader(new FileReader(file));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        Stream<String> lines = Files.lines(Paths.get(filePath));
 
-        String st;
         ArrayList<Order> orders = new ArrayList<>();
 
-        while (true) {
-            try {
-                if ((st = br.readLine()) != null) {
-                    String[] stockData = st.split(" ");
-                    Order newOrder = new Order();
+        lines.forEach(s -> {
+            String[] stockData = s.split(" ");
+            Order newOrder = new Order();
 
-                    newOrder.setOrderId(stockData[0]);
-                    newOrder.setTime(LocalTime.parse(stockData[1], DateTimeFormatter.ofPattern("HH:mm")));
-                    newOrder.setStock(stockData[2]);
-                    newOrder.setOrderType(stockData[3]);
-                    newOrder.setPrice(Float.parseFloat(stockData[4]));
-                    newOrder.setQuantity(Integer.parseInt(stockData[5]));
+            newOrder.setOrderId(stockData[0]);
+            newOrder.setTime(LocalTime.parse(stockData[1], DateTimeFormatter.ofPattern("HH:mm")));
+            newOrder.setStock(stockData[2]);
+            newOrder.setOrderType(stockData[3]);
+            newOrder.setPrice(Float.parseFloat(stockData[4]));
+            newOrder.setQuantity(Integer.parseInt(stockData[5]));
 
-                    orders.add(newOrder);
-                } else {
-                    break;
-                }
+            orders.add(newOrder);
+        });
+        lines.close();
 
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-        }
         return orders;
     }
 
-    private ArrayList<Order> handleSellRecord(int currentRecordIndex, ArrayList<Order> orders) {
-        Order currentOrder = orders.get(currentRecordIndex);
+    public ArrayList<Order> handleSellRecord(int currentRecordIndex, ArrayList<Order> orders) {
+
+        Order currentOrder;
+        try {
+            currentOrder = orders.get(currentRecordIndex);
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("Index out of bound exception");
+            return new ArrayList<Order>();
+        }
 
         for (int j = currentRecordIndex + 1; j < orders.size() && currentOrder.getQuantity() > 0; j++) {
 
@@ -70,8 +62,15 @@ public class StockExchange {
         return orders;
     }
 
-    private ArrayList<Order> handleBuyRecord(int currentRecordIndex, ArrayList<Order> orders) {
-        Order currentOrder = orders.get(currentRecordIndex);
+    public ArrayList<Order> handleBuyRecord(int currentRecordIndex, ArrayList<Order> orders) {
+
+        Order currentOrder;
+        try {
+            currentOrder = orders.get(currentRecordIndex);
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("Index out of bound exception");
+            return new ArrayList<Order>();
+        }
 
         for (int j = currentRecordIndex + 1; j < orders.size() && currentOrder.getQuantity() > 0; j++) {
 
@@ -92,9 +91,17 @@ public class StockExchange {
         return orders;
     }
 
-    private void calculateStockExchange() {
+    public void calculateStockExchange() {
 
-        ArrayList<Order> stockExchangeOrders = readInputFile("/Users/vishwanath/repos/StockExchange/src/com/navi/orders.txt");
+        ArrayList<Order> stockExchangeOrders;
+
+        try {
+            stockExchangeOrders = readInputFile("/Users/vishwanath/repos/StockExchange/src/com/navi/orders.txt");
+        } catch (IOException e) {
+            System.out.println("Exception in reading file");
+            e.printStackTrace();
+            return;
+        }
 
         /**
          * Algo - for each stockExchangeOrder try to complete it using all possible options(other stockOrders) which are recorded after it.
