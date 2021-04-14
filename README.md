@@ -26,5 +26,5 @@ O(n*n) as we are using two loops to iterate stockExchangeOrders list
 
 ## Unit-Tests
 
-Some unit tests are wriiten in a seperate test file using Mockito and Junit.
+Some unit tests are written in a seperate test file using Mockito and Junit.
 
