@@ -14,7 +14,7 @@ Input is read from a text file which has follwoing parameters -
 6. Quantity.
 ### Example - #1 09:45 BAC sell 240.12 100
 
-Output is printed to console in "<buy-order-id> <sell-price> <qty> <sell-order-id>" format
+Output is printed to console in `<buy-order-id>` `<sell-price>` `<qty>` `<sell-order-id>` format
 ### Example - #3 237.45 90 #2
 
 
@@ -22,7 +22,7 @@ Output is printed to console in "<buy-order-id> <sell-price> <qty> <sell-order-i
 For each stockExchangeOrder try to complete it using all possible options(other stockOrders) which are recorded after it.
 
 ## Time Complexity - 
-O(n*n) as we are using two loops to iterate th stockExchangeOrders list
+O(n*n) as we are using two loops to iterate stockExchangeOrders list
 
 ## Unit-Tests
 
