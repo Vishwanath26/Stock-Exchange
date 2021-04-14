@@ -20,8 +20,7 @@ Output is printed to console in <buy-order-id> <sell-price> <qty> <sell-order-id
 
 ## Algorithm - 
 For each stockExchangeOrder try to complete it using all possible options(other stockOrders) which are recorded after it.
-Iterate using two loops to cover each stockExchangeOrder.
-
+Time Complexity - O(n*n) as we are using two loops to iterate th stockExchangeOrders list
 
 ## Unit-Tests
 
